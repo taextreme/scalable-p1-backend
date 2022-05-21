@@ -1,4 +1,4 @@
-package java.io.scalable.project.backend.model;
+package app.io.scalable.project.backend.model;
 
 import lombok.Data;
 

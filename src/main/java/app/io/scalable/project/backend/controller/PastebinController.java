@@ -1,15 +1,13 @@
-package java.io.scalable.project.backend.controller;
+package app.io.scalable.project.backend.controller;
 
+import app.io.scalable.project.backend.model.PasteContent;
+import app.io.scalable.project.backend.model.PastebinRecentsResponse;
+import app.io.scalable.project.backend.model.PastebinResponse;
+import app.io.scalable.project.backend.model.PostApiPasteRequest;
+import app.io.scalable.project.backend.service.PastebinSvc;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import java.io.scalable.project.backend.model.PasteContent;
-import java.io.scalable.project.backend.model.PastebinRecentsResponse;
-import java.io.scalable.project.backend.model.PastebinResponse;
-import java.io.scalable.project.backend.service.PastebinSvc;
 import java.util.List;
 import java.util.Objects;
 
@@ -21,15 +19,14 @@ public class PastebinController {
     private PastebinSvc service;
 
     @PostMapping("/api/paste")
-    public PastebinResponse postApiPaste(String title, String content) {
+    public PastebinResponse postApiPaste(@RequestBody PostApiPasteRequest request) {
         PastebinResponse response = new PastebinResponse();
-        Long id = service.insertPasteContent(title, content);
+        Long id = service.insertPasteContent(request.getTitle(), request.getContent());
         PasteContent pasteContent = service.getPasteContentById(id);
-        if (Objects.equals(pasteContent.getTitle(), title) && Objects.equals(pasteContent.getContent(), content)) {
+        if (Objects.equals(pasteContent.getTitle(), request.getTitle()) && Objects.equals(pasteContent.getContent(), request.getContent())) {
             response.setCode(200);
             response.getData().put("id", String.valueOf(id));
-        }
-        else {
+        } else {
             response.setCode(400);
             response.getData().put("error", "Pastebin error from POST /api/paste");
         }

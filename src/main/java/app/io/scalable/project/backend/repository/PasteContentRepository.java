@@ -1,9 +1,9 @@
-package java.io.scalable.project.backend.repository;
+package app.io.scalable.project.backend.repository;
 
+import app.io.scalable.project.backend.model.PasteContent;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
-import java.io.scalable.project.backend.model.PasteContent;
 import java.util.List;
 
 @Repository

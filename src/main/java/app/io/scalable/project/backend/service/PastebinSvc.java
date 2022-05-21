@@ -1,10 +1,10 @@
-package java.io.scalable.project.backend.service;
+package app.io.scalable.project.backend.service;
 
+import app.io.scalable.project.backend.model.PasteContent;
+import app.io.scalable.project.backend.repository.PasteContentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.io.scalable.project.backend.model.PasteContent;
-import java.io.scalable.project.backend.repository.PasteContentRepository;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
