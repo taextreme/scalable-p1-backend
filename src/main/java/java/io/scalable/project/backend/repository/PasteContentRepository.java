@@ -14,6 +14,7 @@ public interface PasteContentRepository extends CrudRepository<PasteContent, Lon
 
     PasteContent findByTitle(String title);
 
-    List<PasteContent> findAllByOrderByCreatedAtDesc();
+    List<PasteContent> findTop100ByOrderByCreatedAtDesc();
+
 
 }

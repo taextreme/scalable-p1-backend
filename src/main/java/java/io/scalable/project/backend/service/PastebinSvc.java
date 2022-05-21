@@ -8,6 +8,7 @@ import java.io.scalable.project.backend.model.PastebinResponse;
 import java.io.scalable.project.backend.repository.PasteContentRepository;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 
 @Service
 public class PastebinSvc {
@@ -25,7 +26,11 @@ public class PastebinSvc {
         return repository.save(pasteContent).getId();
     }
 
-    public PasteContent getPasteContent(Long id) {
+    public PasteContent getPasteContentById(Long id) {
         return repository.findById(id.longValue());
+    }
+
+    public List<PasteContent> get100PasteContentOrderByCreateDate() {
+        return repository.findTop100ByOrderByCreatedAtDesc();
     }
 }
