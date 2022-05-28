@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 @RestController
@@ -19,17 +20,16 @@ public class PastebinController {
     private PastebinSvc service;
 
     @PostMapping("/api/paste")
-    public PastebinResponse postApiPaste(@RequestBody PostApiPasteRequest request) {
+    public Map<String, String> postApiPaste(@RequestBody PostApiPasteRequest request) {
         Long id = service.insertPasteContent(request.getTitle(), request.getContent());
         PasteContent pasteContent = service.getPasteContentById(id);
         if (Objects.equals(pasteContent.getTitle(), request.getTitle()) && Objects.equals(pasteContent.getContent(), request.getContent())) {
-            return successPostApiPasteRsponse(pasteContent);
+            return successPostApiPasteRsponse(pasteContent).getData();
         } else {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Pastebin error from POST /api/paste");
         }
     }
 
-    @ResponseStatus(code = HttpStatus.OK)
     private PastebinResponse successPostApiPasteRsponse(PasteContent pasteContent) {
         PastebinResponse response = new PastebinResponse();
         response.getData().put("id", String.valueOf(pasteContent.getId()));
@@ -37,15 +37,14 @@ public class PastebinController {
     }
 
     @GetMapping("/api/{id}")
-    public PastebinResponse getApiId(@PathVariable Long id) {
+    public Map<String, String> getApiId(@PathVariable Long id) {
         PasteContent pasteContent = service.getPasteContentById(id);
         if (Objects.nonNull(pasteContent)) {
-            return successGetApiId(pasteContent);
+            return successGetApiId(pasteContent).getData();
         }
         throw new ResponseStatusException(HttpStatus.NOT_FOUND);
     }
 
-    @ResponseStatus(code = HttpStatus.OK)
     private PastebinResponse successGetApiId(PasteContent pasteContent) {
         PastebinResponse response = new PastebinResponse();
         response.getData().put("title", pasteContent.getTitle());
@@ -55,12 +54,12 @@ public class PastebinController {
     }
 
     @PostMapping("/api/recents")
-    public PastebinRecentsResponse postApiRecents() {
+    public List<PasteContentNoID> postApiRecents() {
         List<PasteContent> contents = service.get100PasteContentOrderByCreateDate();
         if (contents.isEmpty()) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND);
         } else {
-            return successPostApiRecents(contents);
+            return successPostApiRecents(contents).getData();
         }
     }
 

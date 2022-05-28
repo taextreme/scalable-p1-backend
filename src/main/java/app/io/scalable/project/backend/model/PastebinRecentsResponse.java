@@ -7,7 +7,6 @@ import java.util.List;
 
 @Data
 public class PastebinRecentsResponse {
-    private Integer code = 200;
     private List<PasteContentNoID> data = new ArrayList<>();
 }
 
